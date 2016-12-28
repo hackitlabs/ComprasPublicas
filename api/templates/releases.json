@@ -1,0 +1,13 @@
+{
+   "uri":"http://a.com/ocds-213czf-001-01-planning.json",
+   "publishedDate":"2016-12-08T20:17:41-04:00",
+   "publisher": {
+       "name": "Pro-Veedor",
+       "uri": "http://pro-veedor.pe"
+   },
+   "license":"http://opendatacommons.org/licenses/pddl/1.0/",
+   "publicationPolicy":"http://pro-veedor.pe/como",
+   "releases": [
+        {{ contratos }}
+    ]
+}

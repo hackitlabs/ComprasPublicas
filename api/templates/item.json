@@ -1,0 +1,4 @@
+{
+  "id": "ocds-ga10ve-{{ contrato.id }}-{{ contrato.codigo }}-{{ item.nro_item }}",
+  "description": "{{ item.descripcion_item }}"
+}

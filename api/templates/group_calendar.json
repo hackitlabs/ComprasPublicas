@@ -1,0 +1,4 @@
+{
+    "date": "{{ data.fecha_publicacion.strftime('%a %b %d %Y ') }}00:00:00 GMT-0500",
+    "count": {{ data.value }}
+}

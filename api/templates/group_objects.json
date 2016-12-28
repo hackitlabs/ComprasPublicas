@@ -1,0 +1,4 @@
+{
+    "name": "{{ data.objeto }}",
+    "y": {{ data.total }}
+}

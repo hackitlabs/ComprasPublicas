@@ -1,0 +1,90 @@
+{
+    "language": "es",
+    "ocid": "ocds-ga10ve-{{ contrato.id }}-{{ contrato.codigo }}",
+    "id": "ocds-ga10ve-{{ contrato.id }}-{{ contrato.codigo }}",
+    "date": "{{ contrato.fecha_contrato|replace(" ", "T") }}",
+    "tag": [
+        "contract"
+    ],
+    "initiationType": "tender",
+    "tender": {
+        "id": "ocds-ga10ve-{{ contrato.id }}-{{ contrato.codigo }}",
+        "description": "{{ contrato.objeto_descripcion }}",
+        "value": {
+            "amount": {{ contrato.valor_referencial }},
+            "currency": "{{ contrato.tipo_moneda }}"
+        },
+        "procurementMethodDetails": "{{ contrato.tipo_proceso }}",
+        "procurementMethodRationale": "{{ contrato.modalidad_sel }}",
+        "tenderPeriod":{
+            "startDate": "{{ contrato.fecha_publicacion|replace(" ", "T") }}"
+        },
+        "procuringEntity": {
+            "identifier": {
+                "id": "{{ entidad.ruc_entidad }}",
+                "legalName": "{{ entidad.nombre }}"
+            }
+        },
+        "tenderers": [
+            {
+                "identifier": {
+                    "id": "{{ empresa.ruc }}",
+                    "legalName": "{{ empresa.razon_social }}"
+                },
+                "name": "{{ empresa.razon_social }}"
+            }
+        ]
+    },
+    "buyer": {
+        "identifier": {
+            "id": "{{ entidad.ruc_entidad }}",
+            "legalName": "{{ entidad.nombre }}"
+        },
+        "name": "{{ entidad.nombre }}"
+    },
+    "awards": [
+        {
+            "id": "ocds-ga10ve-{{ contrato.id }}-{{ empresa.ruc }}",
+            "value": {
+                "amount": {{ contrato.monto }},
+                "currency": "{{ contrato.tipo_moneda }}"
+            },
+            "suppliers": [
+                {
+                    "identifier": {
+                        "id": "{{ empresa.ruc }}",
+                        "legalName": "{{ empresa.razon_social }}"
+                    },
+                    "name": "{{ empresa.razon_social }}"
+                }
+            ]
+        }
+    ],
+    "contracts": [
+        {
+            "id": "ocds-ga10ve-{{ contrato.id }}-{{ contrato.codigo }}",
+            "awardID": "ocds-ga10ve-{{ contrato.id }}-{{ empresa.ruc }}",
+            "title": "{{ contrato.id }}-{{ contrato.codigo }}",
+            "description": "{{ contrato.descripcion }}",
+            "status": "active",
+            "period": {
+                "startDate": "{{ contrato.fecha_inicio|replace(" ", "T") }}",
+                "endDate": "{{ contrato.fecha_fin|replace(" ", "T") }}"
+            },
+            "value": {
+                "amount": {{ contrato.monto }},
+                "currency": "{{ contrato.tipo_moneda }}"
+            },
+            "items": [{{ items }}],
+            "dateSigned": "{{ contrato.fecha_contrato|replace(" ", "T") }}",   
+            "documents": [
+                {
+                    "id": "0001",
+                    "url": "{{ contrato.link_contrato|replace("\\", "/") }}",
+                    "format": "application/pdf",
+                    "language": "es"
+                }
+            ]
+        }
+    ]
+}
