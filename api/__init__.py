@@ -20,6 +20,9 @@ db_engine = create_engine(
   echo=settings.DEBUG
   )
 
+months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
+           'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+
 @app.before_request
 def before_request():
   g.db = sessionmaker(
@@ -65,6 +68,21 @@ def get_entity(id):
   _releases = render_template("releases.json", datecallback=date, contratos=_contratos)
   return Response(_releases, content_type='application/json')
 
+#Return amounts of contracts by goverment office
+@app.route('/api/get/amounts/<int:id>/<string:year>', methods=['GET'])
+def get_amount_office(id, year):
+  _data = [_e for _e in search.Contratos().getObjectsPerYear(id, year)]
+  _amounts = [render_template("amount.json", data=_i) for _i in _data]
+  _amounts = "[%s]" % (',').join(_amounts)
+  return Response(_amounts, content_type='application/json')
+
+#Return amounts of contracts by goverment office
+@app.route('/api/get/amounts/<string:field>/<int:office>/<string:year>/<string:currency>', methods=['GET'])
+def get_amount_office_object(field, office, year, currency):
+  _data = search.Contratos().getObjectsPerYear(field, office, year, currency)
+  _amounts = [render_template("amount_objects.json", data=_i) for _i in _data]
+  _amounts = "[%s]" % (',').join(_amounts)
+  return Response(_amounts, content_type='application/json')
 
 #Return contracts by Company
 @app.route('/api/get/empresa/<int:id>', methods=['GET'])

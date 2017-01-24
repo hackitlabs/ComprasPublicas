@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import create_engine, and_, or_, func, extract
+from sqlalchemy import create_engine, and_, or_, func, extract, select
 from sqlalchemy.orm import sessionmaker
 from math import ceil
 import settings
@@ -59,6 +59,66 @@ class Contratos():
 
     return _items
 
+  def getAmountsPerYear(self, id, year):
+    
+    _objects = db.query(
+      extract('month', models._contrato.fecha_contrato).label("mes"),
+      func.sum(models._contrato.monto).label("monto")
+    ).filter(
+      and_(
+        models._contrato.entidad_id == id,
+        extract('year', models._contrato.fecha_contrato) == year
+      )
+    ).order_by(
+      extract('month', models._contrato.fecha_contrato)
+    ).group_by(
+      extract('month', models._contrato.fecha_contrato)
+    ).all()
+
+    return _objects
+
+  def getAmountsPerObjectYear(self, field, id, year, filter, currency):
+    
+    _objects = db.query(
+      extract('month', models._contrato.fecha_contrato).label("mes"),
+      func.sum(models._contrato.monto).label("monto")
+    ).filter(
+      and_(
+        models._contrato.entidad_id == id,
+        extract('year', models._contrato.fecha_contrato) == year,
+        getattr(models._contrato, field) == filter,
+        models._contrato.tipo_moneda == currency
+      )
+    ).order_by(
+      extract('month', models._contrato.fecha_contrato)
+    ).group_by(
+      extract('month', models._contrato.fecha_contrato)
+    ).all()
+
+    return _objects
+
+  def getObjectsPerYear(self, field, id, year, currency):
+    _objects = db.query(
+      getattr(models._contrato, field)
+    ).filter(
+      and_(
+        models._contrato.entidad_id == id,
+        extract('year', models._contrato.fecha_contrato) == year,
+        models._contrato.tipo_moneda == currency
+      )
+    ).group_by(getattr(models._contrato, field)).all()
+
+    _list = []
+    for _o in _objects:
+      _amounts = self.getAmountsPerObjectYear(field, id, year, _o[0], currency)
+      _values = [0 for _i in range(0, 12)]
+      for _a in _amounts:
+        _values[int(_a[0])-1] = float(_a[1])
+      _list.append({"objeto": (_o[0]).title(), "data": _values})
+
+    return _list
+
+
 class Entidad():
 
   def getContratos(self, id, limit):
@@ -87,17 +147,18 @@ class Entidad():
   def get_contracts_year(self, id, year):
 
     _objects = db.query(
-      models._contrato.fecha_publicacion,
+      models._contrato.fecha_contrato,
       func.count(models._contrato.id).label("value"),
       func.sum(models._contrato.monto).label("monto")
     ).filter(
       and_(
-        extract('year', models._contrato.fecha_publicacion) == year
+        models._contrato.entidad_id == id,
+        extract('year', models._contrato.fecha_contrato) == year
       )
     ).order_by(
-      models._contrato.fecha_publicacion.desc()
+      models._contrato.fecha_contrato.desc()
     ).group_by(
-      models._contrato.fecha_publicacion
+      models._contrato.fecha_contrato
     ).all()
 
     return _objects

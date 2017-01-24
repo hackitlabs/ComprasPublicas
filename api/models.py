@@ -22,6 +22,7 @@ class _entidadGobierno(Entity):
   nivel_gobierno = Column(UnicodeText, nullable=False)
   dependencia = Column(UnicodeText, nullable=True)
   contrato = relationship("_contrato")
+  hash = Column(UnicodeText, nullable=False)
 
 
 class _representante(Entity):
@@ -140,6 +141,7 @@ if __name__ == '__main__':
   _tipo_gobierno.nombre = 'Ministerio de Agricultura'
   _tipo_gobierno.tipo_entidad = 'ministerio'
   _tipo_gobierno.nivel_gobierno = 'poder_ejecutivo'
+  _tipo_gobierno
   db.add(_tipo_gobierno)
 
   _tipo_gobierno = _entidadGobierno()
