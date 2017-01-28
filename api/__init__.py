@@ -109,6 +109,13 @@ def get_contracts_by_year(id, year):
   _graph = "[%s]" % (',').join([render_template("group_calendar.json", data=_i) for _i in _data])
   return Response(_graph, content_type='application/json')
 
+#Return top proveedores
+@app.route('/api/get/empresa/top/<int:entidad_id>/<string:type>/<string:year>')
+def get_top_proveedores(entidad_id, type, year):
+  _tlist = search.Empresa().getTopProveedores(entidad_id, type, year)
+  _top = "[%s]" % (',').join([ render_template("top_proveedores.json", data=_t) for _t in _tlist])
+  return Response(_top, content_type='application/json')
+
 #return contracts by 
 @app.route('/api/get/search/<string:type>', methods=['GET'])
 def get_search(type):
