@@ -1,0 +1,94 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+  <title>Pro-veedor.pe - Version 2.0 | Buscador de contrataciones publicas del estado peruano</title>
+  <!--Import Google Icon Font-->
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"  media="screen,projection"/>
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+  <div class="navbar-fixed">
+    <nav role="navigation">
+      <div class="nav-wrapper container">
+        <a id="logo-container" href="/" class="brand-logo"><i class="large material-icons">visibility</i>Proveedor - Versión 2.0</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="/entidades">Entidades</a></li>
+          <li><a href="/proveedores">Proveedores</a></li>
+          <li><a href="/visualizaciones">Visualizaciones</a></li>
+          <li><a href="/api">API</a></li>
+          <li><a href="/proyecto">Acerca del proyecto</a></li>
+        </ul>
+        <ul id="nav-mobile" class="side-nav">
+          <li><a href="#">Poder ejecutivo</a></li>
+        </ul>
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+      </div>
+    </nav>
+  </div>
+
+  
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <form action="/buscar" method="GET">
+        <div class="row center">
+          <div class="col s4 offset-s4"><h1 class="center">Pro-veedor.pe</h1></div>
+          <div class="col s10 offset-s2">
+            <p>Tenemos <b>20.000 contratos</b> con <b>8.000 empresas proveedoras</b> en nuestro sistema ... y seguimos sumando</p>
+          </div>
+          <div class="col s6 offset-s3">
+            <div class="input-field">
+              <input placeholder='Buscar por palabras claves. Ejemplo: "Publicidad, limpieza"' type="search" name="search">
+              <span class="desc_buscador">Puedes separar las palabras por comas <b>(,)</b> para realizar una busqueda más completa.</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center"><i class="medium material-icons">view_list</i></h2>
+            <h5 class="center">Vamos acumulando más contrataciones</h5>
+            <p class="light">En Pro-veedor.pe estamos trabajando para acumular más información, por el momento contamos con datos del Poder Ejecutivo y de sus respectivas Unidades Ejecutoras.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center"><i class="medium material-icons">insert_chart</i></h2>
+            <h5 class="center">Comparte nuestras visualizaciones</h5>
+
+            <p class="light">Tenemos unas serie de gráficos que te facilitarán la exploración. Si te interesa alguna en particular, la puedes incrustar en tu sitio web o en tus artículos.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center"><i class="medium material-icons">code</i></h2>
+            <h5 class="center">Si te interesa programar, conéctate a nuestra API</h5>
+            <p class="light">Con tu colaboración podemos seguir transparentando el sistema de contrataciones públicas, revisa nuestra documentación y comparte tu conocimiento.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+</body>
+</html>

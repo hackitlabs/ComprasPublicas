@@ -1,0 +1,4 @@
+{
+  name: " {{ data.tipo_proceso|title }} ",
+  data: [{{ data.contratos }}]
+}

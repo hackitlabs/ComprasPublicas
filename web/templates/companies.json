@@ -1,0 +1,4 @@
+{
+	"id":"{{ d.ruc }}",
+	"name":"{{ d.razon_social }}"
+}

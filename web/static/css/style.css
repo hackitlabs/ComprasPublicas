@@ -1,0 +1,89 @@
+._color_gen{
+	color: #ee6e73;
+}
+
+h1{
+	font-size: 35px;
+}
+
+h2{
+    font-size: 30px;
+}
+
+h5{
+	margin: 0px;
+}
+
+nav .nav-wrapper form, nav .nav-wrapper form .input-field{
+	height: 100%;
+}
+
+nav {
+    color: #fff;
+    background-color: #ee6e73;
+    width: 100%;
+    height: 56px;
+    line-height: 56px;
+}
+
+nav .brand-logo {
+    position: absolute;
+    color: #fff;
+    display: inline-block;
+    font-size: 1.4rem;
+    padding: 0;
+    white-space: nowrap;
+}
+
+li.search .search-wrapper {
+    margin: 0 12px;
+    transition: margin .25s ease;
+}
+.card {
+    position: relative;
+    margin: 0.5rem 0 1rem 0;
+    background-color: #fff;
+    transition: box-shadow .25s;
+    border-radius: 2px;
+}
+
+li.search {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 120px;
+    margin-top: 1px;
+    padding: 1px 0 0 0;
+    z-index: 2;
+}
+
+
+.input-field input[type=search], .input-field input[type=search]:focus {
+    background-color: #fff;
+    border-bottom: solid black 1px;
+    box-shadow: none;
+    color: #444;
+    width: 100%;
+    padding: 0px;
+    margin-bottom: 5px;
+}
+
+.desc_buscador{
+	font-size: 12px;
+}
+
+.entidad_list .card .card-content{
+    min-height: 150px;
+}
+
+.entidad_list .card .card-content .card-title{
+    line-height: 16px;
+}
+
+span.objeto-servicios{
+    display: inline-block;
+    background: green;
+    color: #ffffff;
+    font-size: 12px;
+    padding: 2px 4px;
+}

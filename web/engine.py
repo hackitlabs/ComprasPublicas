@@ -22,7 +22,7 @@ class Contratos():
     _contracto = db.query(
       models._contrato
     ).filter(
-      models._contrato.id == id
+      models._contrato.id == id 
     ).first()
     return _contracto
 
@@ -104,8 +104,20 @@ class Contratos():
       _list.append({"objeto": (_o[0]).title(), "data": _values})
     return _list
 
-
 class Entidad():
+
+  def getEntidades(self):
+    _entidades = db.query(
+        models.buyer.id,
+        models.buyer.nombre,
+        func.count(distinct(models._contrato.empresa_id)).label("count")
+      ).join(
+        models._contrato
+      ).group_by(
+        models.buyer.id
+      ).all()
+    return _entidades
+
   def getContratos(self, id, limit):
     _contractos = db.query(
       models._contrato
@@ -113,6 +125,117 @@ class Entidad():
       models._contrato.entidad_id == id
     ).limit(limit).all()
     return _contractos
+
+  def getProcesos(self, id, moneda):
+    _contratos = db.query(
+      models._contrato.tipo_proceso,
+      func.count(models._contrato.id).label("contratos"),
+      func.count(distinct(models._contrato.empresa_id)).label("empresas"),
+      func.sum(models._contrato.monto).label("total")
+    ).filter(
+      models._contrato.entidad_id == id,
+      models._contrato.tipo_moneda == moneda
+    ).group_by(
+      models._contrato.tipo_proceso
+    ).order_by(
+      func.count(models._contrato.id).label("contratos").desc()
+    ).all()
+
+    return _contratos
+
+  def getTopContratos(self, id, limit):
+    _contractos = db.query(
+      models._empresa.razon_social,
+      models._contrato.descripcion,
+      models._contrato.objeto,
+      models._contrato.fecha_inicio,
+      models._contrato.fecha_fin,
+      func.count(models._contrato.id).label("contratos"),
+      func.sum(models._itemContrato.monto_item).label("monto"),
+      (models._contrato.fecha_fin - models._contrato.fecha_inicio).label("dias"),
+    ).join(
+      models._contrato, models._empresa.id==models._contrato.empresa_id
+    ).join(
+      models._itemContrato, models._itemContrato.contrato_id==models._contrato.id
+    ).filter(
+      models._contrato.entidad_id == id,
+      models._contrato.tipo_moneda == 'Soles'
+    ).group_by(
+      models._empresa.razon_social,models._contrato.descripcion,
+      models._contrato.objeto, models._contrato.fecha_inicio, models._contrato.fecha_fin
+    ).order_by(
+      func.sum(models._contrato.monto).label("monto").desc(),
+      func.count(models._contrato.id).label("contratos").desc()
+    ).limit(limit).all()
+
+    return _contractos
+
+  def getTopEmpresas(self, id, limit):
+    _contractos = db.query(
+      models._empresa.ruc,
+      models._empresa.razon_social,
+      func.count(models._contrato.id).label("contratos"),
+      func.sum(models._itemContrato.monto_item).label("monto"),
+    ).join(
+      models._contrato, models._empresa.id==models._contrato.empresa_id
+    ).join(
+      models._itemContrato, models._itemContrato.contrato_id==models._contrato.id
+    ).filter(
+      models._contrato.entidad_id == id,
+      models._contrato.tipo_moneda == 'Soles'
+    ).group_by(
+      models._empresa.ruc, models._empresa.razon_social
+    ).order_by(
+      func.count(models._contrato.id).label("contratos").desc(),
+      func.sum(models._itemContrato.monto_item).label("monto").desc()
+    ).limit(limit).all()
+
+    return _contractos
+
+  def getSumaContratos(self, id):
+    _contratos = db.query(
+        models._contrato.tipo_moneda,
+        func.sum(models._contrato.monto).label("total"),
+      ).filter(
+        models._contrato.entidad_id == id
+      ).group_by(
+        models._contrato.tipo_moneda
+      ).order_by(
+        func.sum(models._contrato.monto).label("total").desc()
+      ).all()
+
+    return _contratos
+
+  def getResumen(self, id):
+    _contractos = db.query(
+      func.count(models._contrato.id).label("contratos"),
+      func.count(distinct(models._contrato.empresa_id)).label("empresas"),
+      func.count(distinct(models._miembro_consorcio.consorcio_id)).label("consorcios"),
+      func.count(distinct(models._miembro_consorcio.miembro_id)).label("miembros"),
+      func.count(distinct(models._contrato.destino_pago_id)).label("cobraron"),
+      func.avg(func.justify_days(models._contrato.fecha_fin - models._contrato.fecha_inicio)).label("dias"),
+      func.min(models._contrato.fecha_publicacion).label("fecha")
+    ).outerjoin(
+      models._miembro_consorcio, models._miembro_consorcio.id==models._contrato.miembro_id
+    ).filter(
+      models._contrato.entidad_id == id
+    ).first()
+    return _contractos
+
+  def getCompanies(self, id):
+    _companies = db.query(
+      models._empresa.ruc,
+      models._empresa.razon_social,
+      func.count(models._empresa.id)
+    ).outerjoin(
+      models._contrato, models._contrato.empresa_id==models._empresa.id
+    ).filter(
+      models._contrato.entidad_id == id
+    ).group_by(
+      models._empresa.ruc,
+      models._empresa.razon_social,
+    ).all()
+    return _companies
 
   def get_objects_by_year(self, id, year):
     _objects = db.query(

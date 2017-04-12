@@ -1,0 +1,4 @@
+{
+    "Date": "{{ data.fecha_contrato.strftime('%Y-%m-%d') }}",
+    "count": {{ data.value }}
+}

@@ -97,14 +97,14 @@ class importData():
   def _getEntidad(self, row):
     ruc = row[2]
     _entidad = db.query(
-      models._entidadGobierno
+      models.buyer
     ).filter(
-      models._entidadGobierno.ruc_entidad == ruc
+      models.buyer.ruc_entidad == ruc
     )
     return _entidad.first().id if _entidad.count() > 0 else self._insertEntidad(row)
 
   def _insertEntidad(self, row):
-    _entidad = models._entidadGobierno()
+    _entidad = models.buyer()
     _entidad.ruc_entidad = row[2]
     _entidad.nombre = row[3]
     _entidad.tipo_entidad = 'unidad_ejecutora'

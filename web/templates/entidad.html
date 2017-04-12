@@ -1,0 +1,159 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+  <meta charset="utf-8">
+  <title>Pro-veedor.pe - Version 2.0 | Buscador de contrataciones publicas del estado peruano</title>
+  <!--Import Google Icon Font-->
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}"  media="screen,projection"/>
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+  <div class="navbar-fixed">
+    <nav role="navigation">
+      <div class="nav-wrapper container">
+        <a id="logo-container" href="/" class="brand-logo"><i class="large material-icons">visibility</i>Proveedor - Versión 2.0</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="/entidades">Entidades</a></li>
+          <li><a href="/proveedores">Proveedores</a></li>
+          <li><a href="/visualizaciones">Visualizaciones</a></li>
+          <li><a href="/api">API</a></li>
+          <li><a href="/proyecto">Acerca del proyecto</a></li>
+        </ul>
+        <ul id="nav-mobile" class="side-nav">
+          <li><a href="#">Poder ejecutivo</a></li>
+        </ul>
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+      </div>
+    </nav>
+  </div>
+
+  
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <div class="row">
+        <div class="col s6">
+          <h1>{{ _e.nombre }}</h1>
+          <!--<p><a href="#">ver API</a></p>-->
+          <p></p>
+        </div>
+        <div class="col s2">
+          <h2><i class="small material-icons">library_books</i> {{ _r.contratos}}</h2>
+          <p>Contrataciones realizadas</p>
+        </div>
+        <div class="col s2">
+          <h2><i class="small material-icons">business_center</i> {{ _r.empresas - _r.consorcios}}</h2>
+          <p>Empresas contratadas</p>
+        </div>
+        <div class="col s2">
+          <h2><i class="small material-icons">group_work</i> {{ _r.consorcios}}</h2>
+          <p>Consorcios contratados</b></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s2">
+          <select id="fecha_calendar" name="fecha_calendar">
+            <option value="2010">2010</option>
+            <option value="2011">2011</option>
+            <option value="2012">2012</option>
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option selected value="2015">2015</option>
+            <option value="2016">2016</option>
+          </select>
+          <select id="group_calendar">
+            <option selected value="convocatorias">Convocatorias</option>
+            <option value="contratos">Contratos</option>
+          </select>
+        </div>
+        <div class="calendar_container col s10"><div id="calendar_contrataciones"></div></div>
+      </div>
+      <div class="row">
+        <div class="col s2">
+          <ul class="collection">
+            <li class="collection-item">
+            Total contratado en:
+            </li>
+            {% for m in _m %}
+            <li class="collection-item">
+              <span><b>{{ m.tipo_moneda|title}}</b></span>
+              <span>{{ "{:,}".format(m.total) }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col s5">
+          <ul class="collection">
+            {% for c in _c %}
+            <li class="collection-item avatar">
+              <i class="material-icons circle green">folder</i>
+              <p>
+                <b>{{c.razon_social}}</b>
+                <br />
+                <b>S/. {{ "{:,}".format(c.monto) }}</b>
+              </p>
+              <p>{{ c.descripcion }}</p>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col s5">
+          <ul class="collection">
+            {% for e in _emp %}
+            <li class="collection-item avatar">
+              <i class="circle blue">{{ e.contratos }}</i>
+              <p>
+                <b>{{e.razon_social}}</b>
+                <br />
+                S/. {{ "{:,}".format(e.monto) }}
+              </p>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/stacks.js') }}"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('select').material_select();
+
+      //var tipo_procesos = {{ _p|safe }};
+
+      //create_tipo_procesos('lines_objeto_contrataciones', tipo_procesos);
+
+      render_calendar({{ _e.id }}, $('select').val());
+
+      $("#fecha_calendar").change(function(){
+        console.log($(this).val())
+        render_calendar(10, $(this).val());
+      })
+
+      function render_calendar(_entidid, _year){
+        _end = parseInt(_year) + 1;
+        width = $(".calendar_container").width();
+        create_calendar("#calendar_contrataciones", _entidid, _year, _end);
+      }
+
+    });
+  </script>
+
+</script>
+</body>
+</html>
